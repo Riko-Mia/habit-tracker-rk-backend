@@ -7,6 +7,7 @@ const port = process.env.PORT || 3000
 // password - bKQ500FObvyRIIgW
 // user name - rikomia722_db_user
 
+// const uri = "mongodb+srv://rikomia722_db_user:bKQ500FObvyRIIgW@habit-tracker-rk.sqzykjy.mongodb.net/?appName=habit-tracker-rk"
 const uri = "mongodb+srv://rikomia722_db_user:bKQ500FObvyRIIgW@habit-tracker-rk.sqzykjy.mongodb.net/?appName=habit-tracker-rk"
 
 app.use(cors())
@@ -42,11 +43,27 @@ async function run() {
 
         const db = client.db("habit-tracker")
         const habitsCollection  = db.collection("habits");
+        const habitsUsers = db.collection("users")
+
+
+        app.post("/users", async(req, res) =>{
+            const newUser = req.body;
+            const result = await habitsUsers.insertOne(newUser)
+            res.send(result)
+        })
+
 
 
         app.get("/habits", async (req,res)=>{
             const cursor = habitsCollection.find()
             const result = await cursor.toArray()
+            res.send(result)
+        })
+
+        app.get("/habits/:id", async (req,res)=>{
+            const id =req.params.id
+            const query = {_id: new ObjectId(id)}
+            const result = await habitsCollection.findOne(query)
             res.send(result)
         })
 
@@ -67,19 +84,19 @@ async function run() {
         })
 
 
-        // app.patch("/habits/:id", async (req, res) =>{
-        //     const id = req.params.id;
-        //     const query = {_id: new ObjectId(id)}
+        app.patch("/habits/:id", async (req, res) =>{
+            const id = req.params.id;
+            const query = {_id: new ObjectId(id)}
 
-        //     const update = {
-        //         $set:{
-        //             name: habitsCollection.name,
-        //             catagory: habitsCollection.catagory,
-        //         }
-        //     }
-        //     const result = await habitsCollection.updateOne(query, update)
-        //     res.send(result)
-        // })
+            const update = {
+                $set:{
+                    name: habitsCollection.name,
+                    catagory: habitsCollection.catagory,
+                }
+            }
+            const result = await habitsCollection.updateOne(query, update)
+            res.send(result)
+        })
 
 
 
