@@ -48,8 +48,17 @@ async function run() {
 
         app.post("/users", async(req, res) =>{
             const newUser = req.body;
-            const result = await habitsUsers.insertOne(newUser)
-            res.send(result)
+            const email = req.body.email;
+            const query = {email : email}
+            const existingUser = await habitsUsers.findOne(query);
+            if(existingUser){
+                res.send('User already exits. do not need to add again.')
+            }
+            else{
+
+                const result = await habitsUsers.insertOne(newUser)
+                res.send(result)
+            }
         })
 
 
@@ -69,11 +78,11 @@ async function run() {
 
 
 
-        app.post("/habits", async(req, res) =>{
-            const newHabit = req.body;
-            const result = await habitsCollection.insertOne(newHabit)
-            res.send(result)
-        })
+        // app.post("/habits", async(req, res) =>{
+        //     const newHabit = req.body;
+        //     const result = await habitsCollection.insertOne(newHabit)
+        //     res.send(result)
+        // })
 
 
         app.delete("/habits/:id", async (req, res) =>{
@@ -99,7 +108,14 @@ async function run() {
         })
 
 
+// Create habit start 
 
+        app.post("/createHabits", async(req,res)=>{
+            const habit  = req.body;
+            const result = await habitsCollection.insertOne(habit)
+            res.send(result)
+
+        })
 
 
 
