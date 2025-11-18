@@ -118,7 +118,12 @@ async function run() {
         })
 
 
-
+// Most recently habit
+        app.get("/recently_habits", async(req, res)=>{
+            const cursor = habitsCollection.find().sort({createdAt: -1}).limit(6)
+            const result = await cursor.toArray()
+            res.send(result)
+        })
 
 
         await client.db("admin").command({ ping: 1 });
