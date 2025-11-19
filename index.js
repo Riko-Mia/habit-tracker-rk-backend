@@ -126,6 +126,22 @@ async function run() {
         })
 
 
+
+        //  My Habits 
+        app.get("/myHabits", async(req, res) =>{
+             const userEmail = req.query.gmail;   
+             const query = { email: userEmail };
+            // const query = {};
+            // if(query.email) {
+                // console.log(query, "-===-=-=--==-=-=-=-=-")
+            //     query.email= email
+            // }
+            const cursor = habitsCollection.find(query)
+            const result = await cursor.toArray()
+            res.send(result)
+        })
+
+
         await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!"); 
     }
