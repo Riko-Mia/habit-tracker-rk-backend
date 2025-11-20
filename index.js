@@ -96,12 +96,17 @@ async function run() {
         app.patch("/habits/:id", async (req, res) =>{
             const id = req.params.id;
             console.log(id)
+            const updateProduct = req.body;
             const query = {_id: new ObjectId(id)}
-
             const update = {
                 $set:{
-                    name: habitsCollection.name,
-                    catagory: habitsCollection.catagory,
+                    // name: habitsCollection.name,
+                    // catagory: habitsCollection.catagory,
+                    title : updateProduct.title, 
+                     category : updateProduct.category, 
+                     description : updateProduct.description, 
+                     imageURL : updateProduct.imageURL,
+                    
                 }
             }
             const result = await habitsCollection.updateOne(query, update)
